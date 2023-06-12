@@ -79,7 +79,7 @@ def terminalbot():
           {"role": "system", "content": system_prompt},
           {"role": "assistant", "content": initial_text}]
     
-           while True:
+     while True:
        messages = terminaltalker(messages)
        if messages[-1]["content"] == "exit()":
           break
