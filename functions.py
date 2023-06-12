@@ -71,13 +71,15 @@ def terminalbot():
     redis_password = os.environ.get("REDIS_1_PASSWORD")
     rd = redis.Redis(host=redis_host, port=redis_port, password=redis_password, ssl=True, ssl_ca_certs="/etc/ssl/certs/ca-certificates.crt")
 
-    system_prompt = rd.get("matej@closersintoleaders.com-systemprompt-01").decode('utf-8')
+    system_prompt = rd.get("jeramy@trala.com-systemprompt-01").decode('utf-8')
+    initial_text = rd.get("jeramy@trala.com-initialtext-01").decode('utf-8')
     
     #initialize message
     messages = [
           {"role": "system", "content": system_prompt},
-          {"role": "assistant", "content": "Hey [NAME], It's just Pat with Cole Gordon's team. Saw you responded to an ad about possibly getting into remote, high ticket sales, and I wanted to check in to see if I might be able to help. Got 5 mins for a chat today?"}          ]
-    while True:
+          {"role": "assistant", "content": initial_text}]
+    
+           while True:
        messages = terminaltalker(messages)
        if messages[-1]["content"] == "exit()":
           break
