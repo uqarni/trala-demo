@@ -14,14 +14,15 @@ def main():
     redis_password = os.environ.get("REDIS_1_PASSWORD")
     rd = redis.Redis(host=redis_host, port=redis_port, password=redis_password, ssl=True, ssl_ca_certs="/etc/ssl/certs/ca-certificates.crt")
 
-    system_prompt = rd.get("matej@closersintoleaders.com-systemprompt-01").decode('utf-8')
+    system_prompt = rd.get("jeramy@trala.com-systemprompt-01").decode('utf-8')
+    initial_text = rd.get("jeramy@trala.com-initialtext-01").decode('utf-8')
 
     # Create a title for the chat interface
-    st.title("Pat - Closers.io")
+    st.title("Mel - Trala")
     st.write("This bot is still in alpha. To test, first click the button below.")
     
     if st.button('Click to Start or Restart'):
-        st.write("Hey [NAME], It's just Pat with Cole Gordon's team. Saw you responded to an ad about possibly getting into remote, high ticket sales, and I wanted to check in to see if I might be able to help. Got 5 mins for a chat today?")
+        st.write(initial_text)
         restart_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         with open('database.jsonl', 'r') as db, open('archive.jsonl','a') as arch:
         # add reset 
@@ -35,7 +36,8 @@ def main():
         # Override database with initial json files
             messages = [
                 {"role": "system", "content": system_prompt},
-                {"role": "assistant", "content": "Hey [NAME], It’s just Pat with Cole Gordon’s team. Saw you responded to an ad about possibly getting into remote, high ticket sales, and I wanted to check in to see if I might be able to help. Got 5 mins for a chat today?"}            ]
+                {"role": "assistant", "content": initial_text}            
+            ]
             f.write(json.dumps(messages[0])+'\n')
             f.write(json.dumps(messages[1])+'\n')
 
