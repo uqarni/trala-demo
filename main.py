@@ -28,7 +28,7 @@ def main():
     st.write("This bot is still in alpha. To test, first click the button below.")
     
     if st.button('Click to Start or Restart'):
-        st.write(initial_text)
+        if xp_level st.write(initial_text)
         restart_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         with open('database.jsonl', 'r') as db, open('archive.jsonl','a') as arch:
         # add reset 
