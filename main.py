@@ -19,7 +19,7 @@ def main():
     rd = redis.Redis(host=redis_host, port=redis_port, password=redis_password, ssl=True, ssl_ca_certs="/etc/ssl/certs/ca-certificates.crt")
 
     system_prompt = rd.get("jeramy@trala.com-systemprompt-01").decode('utf-8')
-    system_prompt = system_prompt.format(xp_level = xp_level, age = age)
+    system_prompt = system_prompt.format(xp_level = xp_level, age = age, name = "Mel")
     
     initial_text = rd.get("jeramy@trala.com-initialtext-01").decode('utf-8')
 
