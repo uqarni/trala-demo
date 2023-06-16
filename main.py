@@ -22,13 +22,8 @@ def main():
     system_prompt = rd.get("jeramy@trala.com-systemprompt-01").decode('utf-8')
     system_prompt = system_prompt.format(xp_level = xp_level, age = age, name = "Mel")
 
-    if xp_level == 'new':
-        initial_text = f"Hi there, it’s {name} from Trala!  I would love to hear more about your interest in violin lessons. What inspired you to get started?".format(name="Mel")
-    
-    if xp_level == 'experienced' or xp_level == 'null':
-        initial_text = f"Hi there, it’s {name} from Trala!  I would love to hear more about your interest in violin lessons. When did you get started with the violin?".format(name="Mel")
-        
-
+    initial_text = rd.get("jeramy@trala.com-initialtext-01").decode('utf-8')
+    initial_text = initial_text.format(name=name)
     # Create a title for the chat interface
     st.title("Mel - Trala")
     st.write("This bot is still in alpha. To test, first click the button below.")
