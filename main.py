@@ -23,10 +23,10 @@ def main():
     system_prompt = system_prompt.format(xp_level = xp_level, age = age, name = "Mel")
 
     if xp_level == 'new':
-        initial_text = “Hi there, it’s {name} from Trala!  I would love to hear more about your interest in violin lessons. What inspired you to get started?”.format(name="Mel")
+        initial_text = f"Hi there, it’s {name} from Trala!  I would love to hear more about your interest in violin lessons. What inspired you to get started?".format(name="Mel")
     
     if xp_level == 'experienced' or xp_level == 'null':
-        initial_text = f“Hi there, it’s {name} from Trala!  I would love to hear more about your interest in violin lessons. When did you get started with the violin?”.format(name="Mel")
+        initial_text = f"Hi there, it’s {name} from Trala!  I would love to hear more about your interest in violin lessons. When did you get started with the violin?".format(name="Mel")
         
 
     # Create a title for the chat interface
