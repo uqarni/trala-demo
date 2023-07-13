@@ -13,7 +13,7 @@ def main():
     xp_level = st.selectbox('Experience Level:', ('new', 'experienced', 'null'))
     age = st.number_input("Enter your age", min_value=0)
     name = st.selectbox('Name:', ('Mel', 'Jo'))
-    
+    booking_link = "bookinglink.com/trala"
     redis_host = os.environ.get("REDIS_1_HOST")
     redis_port = 25061
     redis_password = os.environ.get("REDIS_1_PASSWORD")
