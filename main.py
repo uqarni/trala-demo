@@ -5,28 +5,28 @@ import os
 import sys
 from datetime import datetime
 import redis
+from supabase_client import SupabaseConnection
 
+#connect to supabase
 
+supabase = SupabaseConnection()
+data, count = supabase.table("bots_dev").select("*").eq("id", "mel").execute()
+bot_info = data[1][0]
 
 def main():
     
-    xp_level = st.selectbox('Experience Level:', ('new', 'experienced', 'null'))
-    age = st.number_input("Enter your age", min_value=0)
-    name = st.selectbox('Name:', ('Mel', 'Jo'))
+    name = st.text_input('lead name', value = 'Jeremy')
     booking_link = "bookinglink.com/trala"
-    redis_host = os.environ.get("REDIS_1_HOST")
-    redis_port = 25061
-    redis_password = os.environ.get("REDIS_1_PASSWORD")
-    rd = redis.Redis(host=redis_host, port=redis_port, password=redis_password, ssl=True, ssl_ca_certs="/etc/ssl/certs/ca-certificates.crt")
+    name = st.text_input('lead email', value = 'jeremy@trala.com')
 
-    system_prompt = rd.get("jeramy@trala.com-systemprompt-01").decode('utf-8')
-    system_prompt = system_prompt.format(xp_level = xp_level, age = age, name = name, booking_link = booking_link)
 
-    initial_text = rd.get("jeramy@trala.com-initialtext-01").decode('utf-8')
-    initial_text = initial_text.format(name=name)
+    system_prompt = bot_info['system_prompt']
+
+    initial_text = bot_info['initial_text']
+
     # Create a title for the chat interface
     st.title("Mel - Trala")
-    st.write("This bot is still in alpha. To test, first click the button below.")
+    st.write("To test or reset, first click the button below.")
     
     if st.button('Click to Start or Restart'):
         st.write(initial_text)
