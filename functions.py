@@ -50,8 +50,8 @@ functions=[
                             "description": "The timezone of the event based on the lead's local timezone. Ask if you don't know.",
                         },
                     }.
-                  "required": ["attendee_email", "start_year", "start_month", "start_day", "start_hour", "start_minute", "timezone"]
-                }
+                },
+                "required": ["attendee_email", "start_year", "start_month", "start_day", "start_hour", "start_minute", "timezone"]
 
             }
         ]
