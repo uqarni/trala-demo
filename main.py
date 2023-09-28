@@ -91,7 +91,7 @@ def main():
             try:
                 string = string + message["role"] + ": " + message["content"] + "\n\n"
             except: 
-                string = string + message["role"] + ": " + message["function_call"] + "\n\n"
+                print('had trouble with this message: ' + str(message))
         st.write(string)
             
 
