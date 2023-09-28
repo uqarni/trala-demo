@@ -49,7 +49,8 @@ functions=[
                             "enum": ["America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles"],
                             "description": "The timezone of the event based on the lead's local timezone. Ask if you don't know.",
                         },
-                    }
+                    }.
+                  "required": ["attendee_email", "start_year", "start_month", "start_day", "start_hour", "start_minute", "timezone"]
                 }
 
             }
@@ -183,9 +184,11 @@ def ideator(messages):
   )
 
   message = result["choices"][0]["message"]
+  print('step 1 output: ' + str(message))
 
   # Step 2, check if the model wants to call a function
   if message.get("function_call"):
+    print('function call')
     function_name = message["function_call"]["name"]
     function_args = json.loads(message["function_call"]["arguments"])
 
@@ -215,6 +218,7 @@ def ideator(messages):
         messages=messages)
     response = second_response["choices"][0]["message"]["content"]
   else: 
+    print('non function call')
     response = message["content"]
   
   split_response = split_sms(response)
