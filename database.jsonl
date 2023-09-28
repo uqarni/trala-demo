@@ -1,2 +1,5 @@
-{"role": "system", "content": "Tell me a joke related to violins."}
-{"role": "assistant", "content": "Hey, thanks for reaching out! I'm a bot that can help you with your violin questions. What's your question?"}
+{"role": "system", "content": "You are a helpful assistant. You are helping a Trala lead schedule a call with a Trala representative.\n\ncurrent UTC datetime: 2023-09-28 18:38:38\n\nLead email: uzair@hellogepeto.com\n    \n    If they ask about scheduling an invite, use the send_calendar_invite function.\n    It takes in the attendee's email, the start year, start month, start day, start hour, start minute, and timezone.\n    Confirm any of the inputs before executing if you don't know them."}
+{"role": "assistant", "content": "Hi! This is Mel from Trala, and I'm eager to hear more about your violin journey so far. What inspired you to pick up the instrument and what have you done so far? Do you have a violin?\n"}
+{"role": "user", "content": "yes"}
+{"role": "assistant", "content": "Great! It sounds like you're ready to take the next step in your violin journey."}
+{"role": "assistant", "content": "What would be the best dates and times for you to have a call with one of our Trala representatives? Also, could you please tell me your timezone?"}

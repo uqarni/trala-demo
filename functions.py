@@ -126,7 +126,7 @@ def send_calendar_invite(attendee_email, start_year, start_month, start_day, sta
         server.login(smtp_username, smtp_password)
         response = server.sendmail(msg['From'], attendee_emails + bcc_emails,msg.as_string())
         server.quit()
-        return "success"
+        return "success! response = str(response)"
     except Exception as e:
         print("Failed to send invite.")
         print(f"Error: {e}")
@@ -204,9 +204,10 @@ def ideator(messages):
               start_minute=function_args.get("start_minute"),
               timezone=function_args.get("timezone"),
           )
-
+          print("function response: " + str(function_response))
       # Step 4, send model the info on the function call and function response
       messages.append(message)
+      print('messages: ' + str(messages))
       messages.append({
                   "role": "function",
                   "name": function_name,
@@ -220,7 +221,7 @@ def ideator(messages):
   else: 
       print('non function call')
       response = message["content"]
-  
+  print('final response: ' + str(response))
   split_response = split_sms(response)
   count = len(split_response)
   for section in split_response:
