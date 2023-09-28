@@ -49,9 +49,9 @@ functions=[
                             "enum": ["America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles"],
                             "description": "The timezone of the event based on the lead's local timezone. Ask if you don't know.",
                         },
-                    }.
-                },
-                "required": ["attendee_email", "start_year", "start_month", "start_day", "start_hour", "start_minute", "timezone"]
+                    },
+                    "required": ["attendee_email", "start_year", "start_month", "start_day", "start_hour", "start_minute", "timezone"]
+                }
 
             }
         ]
@@ -188,38 +188,38 @@ def ideator(messages):
 
   # Step 2, check if the model wants to call a function
   if message.get("function_call"):
-    print('function call')
-    function_name = message["function_call"]["name"]
-    function_args = json.loads(message["function_call"]["arguments"])
+      print('function call')
+      function_name = message["function_call"]["name"]
+      function_args = json.loads(message["function_call"]["arguments"])
 
-    # Step 3, call the function
-    # Note: the JSON response from the model may not be valid JSON
-    if function_name == "send_calendar_invite":
-      function_response = send_calendar_invite(
-          attendee_email=function_args.get("attendee_email"),
-          start_year=function_args.get("start_year"),
-          start_month=function_args.get("start_month"),
-          start_day=function_args.get("start_day"),
-          start_hour=function_args.get("start_hour"),
-          start_minute=function_args.get("start_minute"),
-          timezone=function_args.get("timezone"),
-      )
+      # Step 3, call the function
+      # Note: the JSON response from the model may not be valid JSON
+      if function_name == "send_calendar_invite":
+          function_response = send_calendar_invite(
+              attendee_email=function_args.get("attendee_email"),
+              start_year=function_args.get("start_year"),
+              start_month=function_args.get("start_month"),
+              start_day=function_args.get("start_day"),
+              start_hour=function_args.get("start_hour"),
+              start_minute=function_args.get("start_minute"),
+              timezone=function_args.get("timezone"),
+          )
 
-    # Step 4, send model the info on the function call and function response
-    messages.append(message)
-    messages.append({
-                "role": "function",
-                "name": function_name,
-                "content": function_response,
-            })
+      # Step 4, send model the info on the function call and function response
+      messages.append(message)
+      messages.append({
+                  "role": "function",
+                  "name": function_name,
+                  "content": function_response,
+              })
 
-    second_response = openai.ChatCompletion.create(
-        model="gpt-4",
-        messages=messages)
-    response = second_response["choices"][0]["message"]["content"]
+      second_response = openai.ChatCompletion.create(
+          model="gpt-4",
+          messages=messages)
+      response = second_response["choices"][0]["message"]["content"]
   else: 
-    print('non function call')
-    response = message["content"]
+      print('non function call')
+      response = message["content"]
   
   split_response = split_sms(response)
   count = len(split_response)
