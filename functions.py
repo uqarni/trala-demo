@@ -202,20 +202,20 @@ def ideator(messages):
           timezone=function_args.get("timezone"),
       )
 
-      # Step 4, send model the info on the function call and function response
-      messages.append(message)
-      messages.append({
-                  "role": "function",
-                  "name": function_name,
-                  "content": function_response,
-              })
+    # Step 4, send model the info on the function call and function response
+    messages.append(message)
+    messages.append({
+                "role": "function",
+                "name": function_name,
+                "content": function_response,
+            })
 
-      second_response = openai.ChatCompletion.create(
-          model="gpt-4",
-          messages=messages)
-      response = second_response["choices"][0]["message"]["content"]
-    else: 
-      response = message["content"]
+    second_response = openai.ChatCompletion.create(
+        model="gpt-4",
+        messages=messages)
+    response = second_response["choices"][0]["message"]["content"]
+  else: 
+    response = message["content"]
   
   split_response = split_sms(response)
   count = len(split_response)

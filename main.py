@@ -16,11 +16,11 @@ def main():
     
     name = st.text_input('lead name', value = 'Jeremy')
     booking_link = "bookinglink.com/trala"
-    name = st.text_input('lead email', value = 'jeremy@trala.com')
+    lead_email = st.text_input('lead email', value = 'jeremy@trala.com')
 
 
     system_prompt = bot_info['system_prompt']
-
+    system_prompt = system_prompt.format(lead_email = lead_email)
     initial_text = bot_info['initial_text']
 
     # Create a title for the chat interface
