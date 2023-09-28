@@ -215,7 +215,7 @@ def ideator(messages):
           messages=messages)
       response = second_response["choices"][0]["message"]["content"]
     else: 
-      response = result["content"]
+      response = message["content"]
   
   split_response = split_sms(response)
   count = len(split_response)
