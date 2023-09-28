@@ -4,7 +4,6 @@ import json
 import os
 import sys
 from datetime import datetime
-import redis
 from supabase_client import SupabaseConnection
 
 #connect to supabase
