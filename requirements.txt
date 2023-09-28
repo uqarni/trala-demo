@@ -3,6 +3,5 @@ supabase
 streamlit
 requests
 openai
-smtplib
 icalendar
 pytz
