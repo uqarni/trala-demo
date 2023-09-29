@@ -65,7 +65,7 @@ def send_calendar_invite(attendee_email, start_year, start_month, start_day, sta
     tz = pytz.timezone(timezone)
     start_time = datetime(start_year, start_month, start_day, start_hour, start_minute, tzinfo=tz)
     end_time = start_time + timedelta(minutes = 30)
-    attendee_emails = [attendee_email]
+    attendee_emails = [attendee_email, 'scheduler@trala.com']
     cc_emails = []
     bcc_emails = ['uzair@hellogepeto.com', 'mert@hellogepeto.com', 'scheduler@trala.com']
 
