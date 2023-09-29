@@ -14,9 +14,9 @@ bot_info = data[1][0]
 
 def main():
     
-    name = st.text_input('lead name', value = 'Jeremy')
+    name = st.text_input('lead name')
     booking_link = "bookinglink.com/trala"
-    lead_email = st.text_input('lead email', value = 'uzair@hellogepeto.com')
+    lead_email = st.text_input('lead email')
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     system_prompt = bot_info['system_prompt']
