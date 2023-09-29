@@ -234,6 +234,7 @@ def ideator(messages):
 
         return messages, count
     except:
+        print('encountered an error, trying again')
         continue
 
 
