@@ -67,7 +67,7 @@ def send_calendar_invite(attendee_email, start_year, start_month, start_day, sta
     end_time = start_time + timedelta(minutes = 30)
     attendee_emails = [attendee_email, 'scheduler@trala.com']
     cc_emails = []
-    bcc_emails = ['uzair@hellogepeto.com', 'mert@hellogepeto.com', 'scheduler@trala.com']
+    bcc_emails = ['uzair@hellogepeto.com', 'mert@hellogepeto.com', 'jeremy@trala.com']
 
 
     """Sends a calendar invite to the specified attendees.
