@@ -57,63 +57,71 @@ functions=[
         ]
 
 def send_calendar_invite(attendee_email, start_year, start_month, start_day, start_hour, start_minute, timezone):
+    """Sends a calendar invite to the specified attendees.
+
+    Args:
+    attendee_email: A list of email addresses of the attendees.
+    start_year: The start year of the invite, default to current year.
+    start_month: The start month of the invite
+    start_day: The start day of the invite
+    start_hour: The start hour of the invite
+    start_minute: The start minute of the invite
+    timezone: The timezone of the invite
+
+    Returns:
+    success or error.
+    """
     organizer_email = 'scheduler@trala.com'
     password = 'jluluyybzsvsfjqu'
     email_subject = "Trala Interest Call Scheduled!"
     invite_subject = "Trala Interest Call"
     description = "Hi there! Looking forward to our call to discuss violin lessons with Trala. If you have any questions or thoughts before this call, contact us from our website."
+    
     tz = pytz.timezone(timezone)
     start_time = datetime(start_year, start_month, start_day, start_hour, start_minute, tzinfo=tz)
-    end_time = start_time + timedelta(minutes = 30)
-    attendee_emails = [attendee_email, 'scheduler@trala.com']
-    cc_emails = []
+    end_time = start_time + timedelta(minutes=30)
+    attendee_emails = [attendee_email]
     bcc_emails = ['uzair@hellogepeto.com', 'mert@hellogepeto.com']
 
+    # Convert start_time to CST for easier comparison
+    cst = pytz.timezone('America/Chicago')
+    current_time_cst = datetime.now(cst)
+    start_time_cst = start_time.astimezone(cst)
 
-    """Sends a calendar invite to the specified attendees.
+    # Check if the event is in the past
+    if start_time_cst < current_time_cst:
+        return "Error: Event is in the past; we can't do that"
 
-    Args:
-        organizer_email: The email address of the organizer.
-        attendee_emails: A list of email addresses of the attendees.
-        subject: The subject of the invite.
-        description: The description of the invite.
-        start_time: The start time of the invite (datetime.datetime object).
-        end_time: The end time of the invite (datetime.datetime object).
+    # Check if the event is within the next hour
+    if start_time_cst < current_time_cst + timedelta(hours=1):
+        return "Error: Event is within the next hour; we can't do that"
 
-    Returns:
-        None.
-    """
-    # Create the MIMEMultipart message.
+    # Check if the event is outside of 9 am - 5 pm CST, Monday - Friday
+    if start_time_cst.weekday() >= 5 or start_time_cst.hour < 9 or start_time_cst.hour >= 17:
+        return "Error: Event is outside of 9 am - 5 pm CST, Monday - Friday, which are our working hours"
+
     msg = MIMEMultipart()
     msg['From'] = f"Trala <{organizer_email}>"
     msg['To'] = ', '.join(attendee_emails)
-    #msg['Bcc'] = ', '.join(bcc_emails)
     msg['Subject'] = email_subject
 
-    # Create the iCalendar event.
     cal = icalendar.Calendar()
     event = icalendar.Event()
     event.add('summary', invite_subject)
     event.add('description', description)
     event.add('dtstart', start_time)
     event.add('dtend', end_time)
-
-    # Add the organizer to the event.
     event.add('organizer', icalendar.vCalAddress(f"mailto:{organizer_email}"))
     event['organizer'].params['cn'] = icalendar.vText('Trala')
-
     cal.add_component(event)
-    # Convert the iCalendar object to a string.
     ical_str = cal.to_ical().decode("utf-8")
 
-    # Attach the iCalendar event to the MIMEMultipart message.
     ical_part = MIMEBase('text', 'calendar', method="REQUEST", charset="UTF-8")
     ical_part.set_payload(ical_str)
     encoders.encode_base64(ical_part)
     ical_part.add_header('Content-Disposition', 'attachment; filename="invite.ics"')
     msg.attach(ical_part)
 
-    # Send the email message.
     smtp_server = 'smtp.gmail.com'
     smtp_port = 587
     smtp_username = organizer_email
@@ -124,12 +132,10 @@ def send_calendar_invite(attendee_email, start_year, start_month, start_day, sta
         server.ehlo()
         server.starttls()
         server.login(smtp_username, smtp_password)
-        response = server.sendmail(msg['From'], attendee_emails + bcc_emails,msg.as_string())
+        server.sendmail(msg['From'], attendee_emails + bcc_emails, msg.as_string())
         server.quit()
-        return "success! response = str(response)"
+        return "success"
     except Exception as e:
-        print("Failed to send invite.")
-        print(f"Error: {e}")
         return "Error: " + str(e)
 
 
