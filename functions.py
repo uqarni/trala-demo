@@ -153,15 +153,16 @@ def split_sms(message):
     part1 = []
     part2 = []
     part1_length = 0
-    for sentence in sentences:
-        if part1_length + len(sentence) <= total_length / 2:
-            part1.append(sentence)
-            part1_length += len(sentence)
-        else:
-            part2.append(sentence)
+    i = 0
+    while i < len(sentences) and part1_length + len(sentences[i]) <= total_length / 2:
+        part1.append(sentences[i])
+        part1_length += len(sentences[i])
+        i += 1
+
+    part2 = sentences[i:]
 
     # Join the sentences in each part back into strings
-    #if part2 is empty, just return part1
+    #if part1 is empty, just return part2
     if len(part1) == 0:
         strings = [" ".join(part2)]
     else:
