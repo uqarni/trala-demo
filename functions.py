@@ -10,6 +10,7 @@ from email import encoders
 import icalendar
 from datetime import datetime, timedelta
 import pytz
+import requests
 
 
 #functions for openai
@@ -20,6 +21,10 @@ functions=[
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "lead_first_name": {
+                            "type": "string",
+                            "description": "The first name of the lead.",
+                        },
                         "attendee_email":{
                             "type": "string",
                             "description": "The email address of the person to send the invite to. If you don't know, ask.",
@@ -50,7 +55,7 @@ functions=[
                             "description": "The timezone of the event based on the lead's local timezone. Ask if you don't know.",
                         },
                     },
-                    "required": ["attendee_email", "start_year", "start_month", "start_day", "start_hour", "start_minute", "timezone"]
+                    "required": ["lead_first_name", "attendee_email", "start_year", "start_month", "start_day", "start_hour", "start_minute", "timezone"]
                 }
 
             }
@@ -60,7 +65,8 @@ def send_calendar_invite(attendee_email, start_year, start_month, start_day, sta
     """Sends a calendar invite to the specified attendees.
 
     Args:
-    attendee_email: A list of email addresses of the attendees.
+    lead_first_name: The first name of the lead.
+    attendee_email: Email address of the lead.
     start_year: The start year of the invite, default to current year.
     start_month: The start month of the invite
     start_day: The start day of the invite
@@ -98,45 +104,27 @@ def send_calendar_invite(attendee_email, start_year, start_month, start_day, sta
 
     # Check if the event is outside of 9 am - 5 pm CST, Monday - Friday
     if start_time_cst.weekday() >= 5 or start_time_cst.hour < 9 or start_time_cst.hour >= 17:
+
         return "Error: Event is outside of 9 am - 5 pm CST, Monday - Friday, which are our working hours"
+    url = "https://hooks.zapier.com/hooks/catch/15188930/3z3tc0k/"
+    data = {
+        "attendee_email": attendee_email,
+        "start_year": start_year,
+        "start_month": start_month,
+        "start_day": start_day,
+        "start_hour": start_hour,
+        "start_minute": start_minute,
+        "timezone": timezone,
 
-    msg = MIMEMultipart()
-    msg['From'] = f"Trala <{organizer_email}>"
-    msg['To'] = ', '.join(attendee_emails)
-    msg['Subject'] = email_subject
-
-    cal = icalendar.Calendar()
-    event = icalendar.Event()
-    event.add('summary', invite_subject)
-    event.add('description', description)
-    event.add('dtstart', start_time)
-    event.add('dtend', end_time)
-    event.add('organizer', icalendar.vCalAddress(f"mailto:{organizer_email}"))
-    event['organizer'].params['cn'] = icalendar.vText('Trala')
-    cal.add_component(event)
-    ical_str = cal.to_ical().decode("utf-8")
-
-    ical_part = MIMEBase('text', 'calendar', method="REQUEST", charset="UTF-8")
-    ical_part.set_payload(ical_str)
-    encoders.encode_base64(ical_part)
-    ical_part.add_header('Content-Disposition', 'attachment; filename="invite.ics"')
-    msg.attach(ical_part)
-
-    smtp_server = 'smtp.gmail.com'
-    smtp_port = 587
-    smtp_username = organizer_email
-    smtp_password = password
-
-    try:
-        server = smtplib.SMTP(smtp_server, smtp_port)
-        server.ehlo()
-        server.starttls()
-        server.login(smtp_username, smtp_password)
-        server.sendmail(msg['From'], attendee_emails + bcc_emails, msg.as_string())
-        server.quit()
-        return "success"
-    except Exception as e:
-        return "Error: " + str(e)
+   }
+    iso_date = dict_to_iso_format(data)
+    data = {
+        "attendee_email": attendee_email,
+        "datetime": iso_date,
+    }
+    
+    requests.post(url, data=data)
+    return "Success!"
 
 
 #split sms
@@ -204,6 +192,7 @@ def ideator(messages):
             # Note: the JSON response from the model may not be valid JSON
             if function_name == "send_calendar_invite":
                 function_response = send_calendar_invite(
+                    lead_first_name=function_args.get("lead_first_name"),
                     attendee_email=function_args.get("attendee_email"),
                     start_year=function_args.get("start_year"),
                     start_month=function_args.get("start_month"),
@@ -240,11 +229,26 @@ def ideator(messages):
             messages.append(section)
 
         return messages, count
-    except:
-        print('encountered an error, trying again')
+    except Exception as e:
+        print('encountered an error, trying again: ', e)
         continue
 
 
 
 
+def dict_to_iso_format(data: dict):
+    # Create a timezone-aware datetime object
+    dt = datetime(
+        data["start_year"],
+        data["start_month"],
+        data["start_day"],
+        data["start_hour"],
+        data["start_minute"],
+        tzinfo=pytz.timezone(data["timezone"])
+    )
+
+    # Convert to ISO 8601 format
+    iso_format = dt.isoformat(timespec='minutes')
+
+    return iso_format
 
