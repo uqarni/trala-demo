@@ -61,7 +61,7 @@ functions=[
             }
         ]
 
-def send_calendar_invite(attendee_email, start_year, start_month, start_day, start_hour, start_minute, timezone):
+def send_calendar_invite(lead_first_name, attendee_email, start_year, start_month, start_day, start_hour, start_minute, timezone):
     """Sends a calendar invite to the specified attendees.
 
     Args:
