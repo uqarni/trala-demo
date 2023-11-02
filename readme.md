@@ -2,7 +2,7 @@
 
 # streamlit code
 
-streamlit run main.py --server.enableCORS false --server.enableXsrfProtection false
+python -m streamlit run main.py
 
 
 # update
