@@ -11,7 +11,7 @@ import icalendar
 from datetime import datetime, timedelta
 import pytz
 import requests
-
+from zoneinfo import ZoneInfo
 
 #functions for openai
 functions=[
@@ -239,14 +239,16 @@ def ideator(messages):
 
 def dict_to_iso_format(data: dict):
     # Create a timezone-aware datetime object
+    timezone = pytz.timezone(data["timezone"])
     dt = datetime(
         data["start_year"],
         data["start_month"],
         data["start_day"],
         data["start_hour"],
         data["start_minute"],
-        tzinfo=pytz.timezone(data["timezone"])
-    )
+        tzinfo=pytz.utc
+    ).astimezone(timezone)
+
 
     # Convert to ISO 8601 format
     iso_format = dt.isoformat(timespec='minutes')
