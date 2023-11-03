@@ -22,7 +22,7 @@ def main():
     now = central_now.strftime("%Y-%m-%d %H:%M:%S")
 
     system_prompt = bot_info['system_prompt']
-    system_prompt = system_prompt.format(lead_email = lead_email, datetime = now)
+    system_prompt = system_prompt.format(lead_first_name = name, lead_email = lead_email, datetime = now)
     initial_text = bot_info['initial_text']
 
     # Create a title for the chat interface
