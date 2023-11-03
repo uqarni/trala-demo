@@ -235,20 +235,21 @@ def ideator(messages):
 
 
 def dict_to_iso_format(data: dict):
-    # Create a timezone-aware datetime object
-    timezone = pytz.timezone(data["timezone"])
-    dt = datetime(
+    # Create a naive datetime object
+    naive_dt = datetime(
         data["start_year"],
         data["start_month"],
         data["start_day"],
         data["start_hour"],
-        data["start_minute"],
-        tzinfo=pytz.utc
-    ).astimezone(timezone)
+        data["start_minute"]
+    )
+    
+    # Localize the naive datetime object to the given timezone
+    timezone = pytz.timezone(data["timezone"])
+    localized_dt = timezone.localize(naive_dt)
 
-
-    # Convert to ISO 8601 format
-    iso_format = dt.isoformat(timespec='minutes')
+    # Convert to ISO 8601 format without the seconds
+    iso_format = localized_dt.isoformat(timespec='minutes')
 
     return iso_format
 
