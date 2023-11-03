@@ -115,15 +115,18 @@ def send_calendar_invite(attendee_email, start_year, start_month, start_day, sta
         "timezone": timezone,
 
    }
-    iso_date = dict_to_iso_format(data)
+    start_time = dict_to_iso_format(data)
+    #add 30 minutes to start time to get end time
+    end_time = datetime.fromisoformat(start_time) + timedelta(minutes=30)
     data = {
         "attendee_email": attendee_email,
-        "datetime": iso_date,
+        "start_time": start_time,
+        "end_time": end_time,
     }
     
     requests.post(url, data=data)
     #return message with normal invite date and time and timezone
-    return "Success! Calendar invite sent to " + attendee_email + "for meeting at " + start_time.strftime("%I:%M %p") + " " + timezone + " on " + start_time.strftime("%A, %B %d") + "."
+    return "Success! Calendar invite sent to " + attendee_email + " for meeting at " + start_time.strftime("%I:%M %p") + " " + timezone + " on " + start_time.strftime("%A, %B %d") + "."
 
 
 #split sms
