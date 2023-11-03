@@ -58,6 +58,9 @@ functions=[
         ]
 
 def send_calendar_invite(attendee_email, start_year, start_month, start_day, start_hour, start_minute, timezone):
+    print('start hour: ' + str(start_hour))
+    print('start minute: ' + str(start_minute))
+    print('timezone: ' + str(timezone))
     """Sends a calendar invite to the specified attendees.
 
     Args:
