@@ -121,7 +121,7 @@ def send_calendar_invite(lead_first_name, attendee_email, start_year, start_mont
     data = {
         "attendee_email": attendee_email,
         "datetime": iso_date,
-        "lead_first_nam": lead_first_name,
+        "lead_first_name": lead_first_name,
     }
     
     requests.post(url, data=data)
