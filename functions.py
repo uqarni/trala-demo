@@ -21,10 +21,6 @@ functions=[
                 "parameters": {
                     "type": "object",
                     "properties": {
-                        "lead_first_name": {
-                            "type": "string",
-                            "description": "The first name of the lead.",
-                        },
                         "attendee_email":{
                             "type": "string",
                             "description": "The email address of the person to send the invite to. If you don't know, ask.",
@@ -55,17 +51,16 @@ functions=[
                             "description": "The timezone of the event based on the lead's local timezone. Ask if you don't know.",
                         },
                     },
-                    "required": ["lead_first_name", "attendee_email", "start_year", "start_month", "start_day", "start_hour", "start_minute", "timezone"]
+                    "required": ["attendee_email", "start_year", "start_month", "start_day", "start_hour", "start_minute", "timezone"]
                 }
 
             }
         ]
 
-def send_calendar_invite(lead_first_name, attendee_email, start_year, start_month, start_day, start_hour, start_minute, timezone):
+def send_calendar_invite(attendee_email, start_year, start_month, start_day, start_hour, start_minute, timezone):
     """Sends a calendar invite to the specified attendees.
 
     Args:
-    lead_first_name: The first name of the lead.
     attendee_email: Email address of the lead.
     start_year: The start year of the invite, default to current year.
     start_month: The start month of the invite
@@ -121,11 +116,11 @@ def send_calendar_invite(lead_first_name, attendee_email, start_year, start_mont
     data = {
         "attendee_email": attendee_email,
         "datetime": iso_date,
-        "lead_first_name": lead_first_name,
     }
     
     requests.post(url, data=data)
-    return "Success!"
+    #return message with normal invite date and time and timezone
+    return "Success! Calendar invite sent to " + attendee_email + "for meeting at " + start_time.strftime("%I:%M %p") + timezone + " on " + start_time.strftime("%A, %B %d") + ""."
 
 
 #split sms
@@ -193,7 +188,6 @@ def ideator(messages):
             # Note: the JSON response from the model may not be valid JSON
             if function_name == "send_calendar_invite":
                 function_response = send_calendar_invite(
-                    lead_first_name=function_args.get("lead_first_name"),
                     attendee_email=function_args.get("attendee_email"),
                     start_year=function_args.get("start_year"),
                     start_month=function_args.get("start_month"),
