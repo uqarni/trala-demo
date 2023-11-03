@@ -122,7 +122,7 @@ def send_calendar_invite(attendee_email, start_year, start_month, start_day, sta
         "attendee_email": attendee_email,
         "start_time": start_time,
         "end_time": end_time,
-        "human_readable_start_time": str(start_hour) + ":" + str(start_minute) + " " + timezone + " on " + str(start_day) + "/" + str(start_month),
+        "human_readable_start_time": start_time_cst + ' CST ' +  str(start_day) + "/" + str(start_month),
     }
     
     requests.post(url, data=data)
