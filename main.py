@@ -10,7 +10,7 @@ import pytz
 #connect to supabase
 
 supabase = SupabaseConnection()
-data, count = supabase.table("bots_dev").select("*").eq("id", "melNLS").execute()
+data, count = supabase.table("bots_dev").select("*").eq("id", "mel").execute()
 bot_info = data[1][0]
 
 def main():
