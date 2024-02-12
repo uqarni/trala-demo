@@ -176,10 +176,10 @@ def ideator(messages):
         print('yo!')
         # Step 1, send model the user query and what functions it has access to
         result = openai.ChatCompletion.create(
-            model="gpt-4",
+            model="gpt-4-1106-previe",
             messages= messages,
-            functions = functions,
-            function_call = "auto",
+            # functions = functions,
+            # function_call = "auto",
         )
 
         message = result["choices"][0]["message"]
