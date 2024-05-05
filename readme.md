@@ -1,4 +1,4 @@
-#app ideator bot
+# app ideator bot
 
 # streamlit code
 
